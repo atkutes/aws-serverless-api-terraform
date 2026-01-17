@@ -1,0 +1,15 @@
+# Terraform
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+
+# Lambda build artifact
+lambda.zip
+
+# Python cache
+__pycache__/
+
+# OS junk
+.DS_Store
+Thumbs.db
