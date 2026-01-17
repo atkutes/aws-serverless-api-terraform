@@ -1,135 +1,81 @@
-📌 Project Overview (What This Project Is About)
+# AWS Serverless API (Lambda + API Gateway + Terraform)
 
-This project demonstrates how to build a real-world serverless API on AWS using:
-AWS Lambda (Python backend logic)
-API Gateway HTTP API (public endpoint)
-IAM (execution role with least privileges)
-Terraform (Infrastructure as Code)
-The API exposes a /hello endpoint that returns a personalized greeting.
-This is a production-grade architecture pattern used across companies for building:
-lightweight backend APIs
-microservices mobile app backends
+A simple serverless HTTP API built with **AWS Lambda**, **API Gateway**, and **Terraform**.  
+The project demonstrates how to deploy a real backend endpoint on AWS using Infrastructure as Code.
 
-internal automation tools
+---
 
-AI endpoints (Bedrock/OpenAI integrations)
+## 🚀 Features
 
-event-driven serverless services
+- Serverless API endpoint: `GET /hello?name=Jonas`
+- Python Lambda function (AWS Lambda)
+- HTTP API (API Gateway v2)
+- IAM execution role with least privileges
+- Full deployment using Terraform
+- Logs and debugging via CloudWatch
 
-The purpose of this project is to demonstrate:
+---
 
-cloud fundamentals
+## 📐 Architecture
 
-serverless architecture
+```
+Client → API Gateway → Lambda → CloudWatch Logs
+```
 
-Infrastructure as Code
+---
 
-debugging AWS services
+## 🧪 Test the API
 
-how to build & deploy a working API using Terraform
+Example request:
 
-                  +-----------------------+
-                  |     Client Request    |
-                  |  curl / browser / app |
-                  +-----------+-----------+
-                              |
-                              v
-                   +----------+-----------+
-                   |     API Gateway      |
-                   |   HTTP API (/hello)  |
-                   +----------+-----------+
-                              |
-                              v
-                      +-------+--------+
-                      |    Lambda      |
-                      |  Python 3.12   |
-                      | app.handler    |
-                      +-------+--------+
-                              |
-                              v
-                   +----------+-----------+
-                   |      CloudWatch      |
-                   |   Logs & Monitoring  |
-                   +----------------------+
+```
+curl "https://your-api-url/hello?name=Jonas"
+```
 
-             (all infrastructure defined with Terraform)
+Response:
 
-🧠 Common Mistakes & Debugging Lessons
+```
+Hello, Jonas! Your serverless API is running.
+```
 
-(Real learning from real problems)
+---
 
-This project intentionally documents several real-world mistakes and how they were diagnosed and fixed — this is extremely valuable for junior cloud engineers.
+## 🛠 Deployment (Terraform)
 
-❌ 1. AWS Region Mismatch
+```
+terraform init
+terraform apply
+```
 
-Problem:
-Resources were deployed to eu-north-1, but the AWS console was opened in us-east-1.
+Destroy:
 
-Symptoms:
+```
+terraform destroy
+```
 
-Lambda appeared "missing"
+---
 
-CloudWatch logs empty
+## 🔧 Tech Stack
 
-API worked but seemed strange
+- AWS Lambda (Python 3.12)
+- Amazon API Gateway (HTTP API)
+- AWS IAM
+- Terraform
 
-Fix:
-Always match:
+---
 
-Terraform region == AWS Console region
+## 📚 What I Learned
 
+- Deploying serverless APIs using Terraform  
+- IAM roles & permissions  
+- Lambda debugging with CloudWatch  
+- Handling request parameters in API Gateway  
+- Fixing region mismatches (eu-north-1 vs us-east-1)  
+- Keeping Terraform repos clean (.terraform, tfstate, zip files ignored)
 
-This is one of the most common mistakes in cloud engineering.
+---
 
-❌ 2. Lambda Error: NoneType has no attribute get
+## 👤 Author
 
-Cause:
-API Gateway triggered Lambda without query parameters.
-event object was None.
-
-Fix:
-Add safe fallback:
-
-params = event.get("queryStringParameters") or {}
-
-
-Lesson:
-When Lambda returns Internal Server Error,
-→ always check CloudWatch logs first.
-
-❌ 3. GitHub Push Failed Because of .terraform/providers
-
-Cause:
-The .terraform/ directory (with a 685MB AWS provider) was accidentally added to Git commit history.
-
-GitHub rejected the push:
-
-GH001: Large files detected
-
-
-Fix:
-
-Delete local .git
-
-Reinitialize the repo
-
-Push clean history
-
-Lesson:
-.gitignore does NOT work retroactively.
-If a large file enters commit history → you must rewrite the repo.
-
-❌ 4. Missing .gitignore Entries
-
-Added proper ignore rules:
-
-terraform/.terraform/
-terraform.tfstate
-terraform.tfstate.backup
-lambda.zip
-__pycache__/
-
-
-Lesson:
-A clean repo = a professional repo.
-Terraform projects must NEVER include state or provider binaries.
+**Andrius Zemaitis**  
+Junior Cloud / Platform Engineer (Oslo)
